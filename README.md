@@ -1,7 +1,7 @@
 # Information Retrieval System - lnc.ltc Scoring: Project Overview:
-* Created an IR system that implements the lnc.ltc scoring mechanism to rank the documents based on the query
+* Created an IR system that implements the lnc.ltc scoring mechanism to rank and retrieve the top 10 documents matching with the query.
 * Transformed the system to implement the Inverted Index representation, to decrease the amount of space taken by the system data struture.
-* Clustered the documents using KNN clustering algorithm, to improve the time taken by the system to return results.
+* Clustered the documents using KNN clustering algorithm, to improve the time taken by the system to retrieve results.
 
 ---
 ### Code and Resources Used:
@@ -28,9 +28,39 @@ After cleaning up the dataset, the file was read to represent each document as a
 The dot product of each of the document vector with query vector gave the individual document score. The top 10 document with highest scores were then returned.
 
 #### Results:
-##### Time taken:
+##### Time taken To Retrieve Results:
 The average time taken to return the results for a corpus of **6000 documents** was observed to be **0.96 seconds**
-##### Space Taken:
+##### Space Taken By The System Data Structre:
 The amount of space taken to represent the **10 MB** of dataset into the system data structre was **900 MB**. It was observed that **99.86%** of the cells in the document matrix were empty, hence indiacting a lot of empty space.
 
 ---
+
+### Inverted Index Model
+
+Instead of storing the entire matrix, only the documents which contain a term were stored in the posting list corresponding to the term, which was later retrieved to calculate the socres with a given query.
+
+#### Results:
+##### Time taken To Retrieve Results:
+The average time taken to return the results for a corpus of **6000 documents** was:
+* **Only rare words: 0.35 seconds** 
+* **Stop words included: 8.31 seconds**
+
+This is because the posting list corresponding to stop words would be very large and hence takes a longer time to retrive the documents and calculate score from posting list.
+##### Space Taken By The System Data Structre:
+The amount of space taken to into the new data structre was only **25 MB**. which is **35 times lesser** than the vector space model.
+
+---
+
+### KNN Clustering of documents:
+Clustering allows us to split up the documents into K groups with a centroid representing each group. We first compute the score of the centroids with the query and then compute scores of the documents from the group whose centroid had the highest score. 
+
+This allows us to speed up retreival time, since now we are only computing the similarity between N/K documents instead if N. However, to set up useful centroids, we must train the kmeans algorithm for more iterations, which adds to our setup time and overhead.
+
+#### Results:
+##### Time taken To Retrieve Results:
+he average time taken to return the results for a corpus of **6000 documents** was observed to be **0.21 seconds**
+
+##### Space Taken By The System Data Structre:
+**900 MB**. This is the same as part vector space model, because we need the entire Matrix to cluster the documents. 
+
+
